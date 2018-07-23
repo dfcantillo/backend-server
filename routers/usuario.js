@@ -1,12 +1,11 @@
 // requieres
 var express = require('express');
 var bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
 var mdAutenticacion = require('../middlewares/autenticacion');
 
 //inicializar variables
 var app = express();
-var Usuarios = require('../models/usuario');
+var Usuario = require('../models/usuario');
 
 
 // ========================================== 
@@ -14,9 +13,15 @@ var Usuarios = require('../models/usuario');
 // ==========================================
 app.get('/', (req, res, next) => {
 
-    Usuarios.find({}, 'nombre email img role')
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+
+
+    Usuario.find({}, 'nombre email img role')
+        .skip(desde)
+        .limit(5)
         .exec(
-            (error, Usuarios) => {
+            (error, usuario) => {
                 if (error) {
                     return res.status(500).json({
                         ok: false,
@@ -24,10 +29,15 @@ app.get('/', (req, res, next) => {
                         errors: error
                     });
                 }
-                res.status(200).json({
-                    ok: true,
-                    mensaje: 'Usuarios obtenidos correctamente',
-                    usuario: Usuarios
+
+                Usuario.count({}, (error, conteo) => {
+
+                    res.status(200).json({
+                        ok: true,
+                        mensaje: 'Usuario obtenidos correctamente',
+                        usuario: usuario,
+                        total: conteo
+                    });
                 });
             });
 });
@@ -44,7 +54,7 @@ app.put('/:id', mdAutenticacion.verificarToken, (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
-    Usuarios.findById(id, (error, usuario) => {
+    Usuario.findById(id, (error, usuario) => {
 
 
         if (error) {
@@ -92,10 +102,9 @@ app.put('/:id', mdAutenticacion.verificarToken, (req, res) => {
 // ========================================== 
 // Método para guardar un usuaios 
 // ==========================================
-
 app.post('/', mdAutenticacion.verificarToken, (req, res) => {
     var body = req.body;
-    var usuario = new Usuarios({
+    var usuario = new Usuario({
         nombre: body.nombre,
         email: body.email,
         password: bcrypt.hashSync(body.password, 10),
@@ -129,7 +138,7 @@ app.delete('/:idUsu', mdAutenticacion.verificarToken, (req, res) => {
 
     var id = req.params.idUsu;
 
-    Usuarios.findByIdAndRemove(id, (error, usuarioBorrado) => {
+    Usuario.findByIdAndRemove(id, (error, usuarioBorrado) => {
 
         if (error) {
             return res.status(500).json({

@@ -7,13 +7,13 @@ var SEED = require('../Config/config').SEED; //Variables de configuración
 
 //inicializar variables
 var app = express();
-var Usuarios = require('../models/usuario');
+var Usuario = require('../models/usuario');
 
 app.post('/', (req, res) => {
 
     var body = req.body;
 
-    Usuarios.findOne({ email: body.email }, (error, usuarioDB) => {
+    Usuario.findOne({ email: body.email }, (error, usuarioDB) => {
         if (error) {
             return res.status(500).json({
                 ok: false,
@@ -24,7 +24,7 @@ app.post('/', (req, res) => {
         if (!usuarioDB) {
             return res.status(400).json({
                 ok: false,
-                mensaje: 'El usuario ya existe , credenciales incorrectas - email ',
+                mensaje: 'Credenciales incorrectas - email ',
                 errors: error
             });
         }

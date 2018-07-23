@@ -16,6 +16,11 @@ app.use(bodyParser.json())
 var appRouter = require('./routers/app-router');
 var usuarioRouter = require('./routers/usuario');
 var loginRouter = require('./routers/login');
+var hospitalRouter = require('./routers/hospital');
+var medicoRouter = require('./routers/medico');
+var busquedaRouter = require('./routers/busqueda');
+var uploadRouter = require('./routers/upload');
+var imagenesRouter = require('./routers/imagenes');
 
 
 // conexion a DB
@@ -24,10 +29,22 @@ mongoose.connect('mongodb://localhost:27017/hostpitalDB', (error, resp) => {
     console.log('La conexión a mongo db se realizo correctamente');
 });
 
+
+// server index config , permite  hacer los archivos publicos desde el cliente con solo llamar la ruta Uploads
+// var serveIndex = require('serve-index');
+// app.use(express.static(__dirname + '/'))
+// app.use('/uploads', serveIndex(__dirname + '/uploads'));
+
+
 // Rutas
 app.use('/usuario', usuarioRouter);
-app.use('/', appRouter);
 app.use('/login', loginRouter);
+app.use('/hospital', hospitalRouter);
+app.use('/medico', medicoRouter);
+app.use('/busqueda', busquedaRouter);
+app.use('/upload', uploadRouter);
+app.use('/img', imagenesRouter);
+app.use('/', appRouter);
 
 
 

@@ -20,4 +20,4 @@ var usuarioSchema = new Schema({
 // Permite decodificar mensaje de error
 usuarioSchema.plugin(uniqueValidator, { message: 'El {PATH} debe ser unico' });
 
-module.exports = mongoose.model('Usuarios', usuarioSchema);
+module.exports = mongoose.model('Usuario', usuarioSchema);
