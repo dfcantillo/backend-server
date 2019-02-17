@@ -88,8 +88,8 @@ app.put('/:id', mdAutenticacion.verificarToken, (req, res) => {
             usuarioActualizado.password = ':=)';
             res.status(201).json({
                 ok: true,
-                usuario: usuarioActualizado,
-                usuarioToken: req.usuerioMD
+                usuario: usuarioActualizado
+                // usuarioToken: req.usuerioMD
             });
 
 
@@ -100,9 +100,9 @@ app.put('/:id', mdAutenticacion.verificarToken, (req, res) => {
 })
 
 // ========================================== 
-// Método para guardar un usuaios 
+// Método para guardar o crear un usuario 
 // ==========================================
-app.post('/', mdAutenticacion.verificarToken, (req, res) => {
+app.post('/', (req, res) => {
     var body = req.body;
     var usuario = new Usuario({
         nombre: body.nombre,

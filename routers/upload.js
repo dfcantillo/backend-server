@@ -56,8 +56,10 @@ app.put('/:tipo/:id', (req, res, next) => {
     // Nombre de archivo personalizado
     var nombreArchivo = `${idUsuario}-${new Date().getMilliseconds()}.${extensionArchivo}`;
     // mover el archivo del temporar al un path en espeficio
-    var path = `./uploads/${ tipo }/${ nombreArchivo }`;
+    var path = `./uploads/${ tipo }/${ nombreArchivo }`;//nombre del path
 
+
+    //Mover el archivo 
     archivo.mv(path, (error) => {
         if (error) {
             return res.status(500).json({
@@ -105,10 +107,13 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
             }
             var pathViejo = `./uploads/${tipo}/${tabla.img}`;
 
+
             // Si existe se elimina
             if (fs.existsSync(pathViejo)) {
-                fs.unlink(pathViejo);
+                console.log('eliminación',pathViejo);
+                fs.unlinkSync(pathViejo);
             }
+
 
             // se actualiza el path de la imagen en la db
             tabla.img = nombreArchivo;

@@ -32,6 +32,7 @@ async function verify(token) {
         email: payload.email,
         img: payload.picture,
         google: true,
+        payload
         // payload: payload
     }
     // const userid = payload['sub'];
@@ -60,7 +61,7 @@ app.post('/google', async(req, res) => {
                 errors: error
             });
         }
-
+        //validar datos del usuario que se logo si el sitema retrona datos
         if (usuarioDB) {
             if (usuarioDB.google === false) {
 
@@ -69,7 +70,7 @@ app.post('/google', async(req, res) => {
                     mensaje: 'Debe iniciar sesión de forma normal no esta registrado con google en la app'
                 });
             } else {
-                //Crear toquen
+                //Crear toquen logear usuario
                 usuarioDB.password = ':=)';
                 var token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 });
 
@@ -83,7 +84,7 @@ app.post('/google', async(req, res) => {
             }
 
         } else {
-            // usuario no existe
+            // usuario no existe ... hay que  crearlo
             var usuario = new Usuario;
             usuario.nombre = googleuser.nombre;
             usuario.email = googleuser.email;
@@ -99,7 +100,8 @@ app.post('/google', async(req, res) => {
                     mensaje: 'Nuevo usuario Creado con credenciales de google',
                     Usuarios: usuarioDB,
                     id: usuarioDB.id,
-                    token: token
+                    token: token,
+                    googleuser
                 });
 
             });
