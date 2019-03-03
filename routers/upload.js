@@ -110,8 +110,8 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
 
             // Si existe se elimina
             if (fs.existsSync(pathViejo)) {
-                console.log('eliminación',pathViejo);
-                fs.unlinkSync(pathViejo);
+                console.log('eliminación ******** ',pathViejo);
+                fs.existsSync(pathViejo);
             }
 
 

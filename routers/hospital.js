@@ -53,6 +53,42 @@ app.get('/', (req, res, next) => {
 });
 
 
+// ========================================================
+// Método que permite consultar un hospital por id
+// ========================================================
+app.get('/:id',(req,res)=>{
+    var id = req.params.id;
+
+    Hospital.findById(id)
+    .populate('usuario','nombre img email')
+    .exec((err,hospital)=>{
+        if(err){
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al buscar hospital',
+                errors: err
+            });
+        }
+
+        if(!hospital){
+
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'no se encontro un hospitital con el id '  +  id  + ' seleccionado',
+                errors: {mensaje: 'No existe un hospital con ese ID'}
+            });
+        }
+
+        return res.status(200).json({
+            ok: false,
+            mensaje:  'hospital encontrado correctamente',  
+            hospital
+        });
+    });
+});
+
+
+
 // ========================================== 
 // Método que permite crear un nuevo hospital 
 // ==========================================

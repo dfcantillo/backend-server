@@ -17,9 +17,9 @@ app.get('/', (req, res, next) => {
     desde = Number(desde);
 
 
-    Usuario.find({}, 'nombre email img role')
-        .skip(desde)
-        .limit(5)
+    Usuario.find({}, 'nombre email img role google')
+        .skip(desde)//desde que pocisión trae los datos
+        .limit(5)// limite de datos a consultar
         .exec(
             (error, usuario) => {
                 if (error) {

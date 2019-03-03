@@ -91,6 +91,46 @@ app.post('/', mdAutenticacion.verificarToken, (req, res) => {
 
 });
 
+
+// ========================================================
+// Obtener medico por id
+// ========================================================
+app.get('/:id',(req,res)=>{
+    var id = req.params.id;
+
+    Medico.findById(id)
+    .populate('hospital', '_id img nombre')
+    .populate('usuario')
+    .exec((error,medicoConsultado)=>{
+        if (error) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'A ocurrido un error al consultar el medico',
+                errors: error
+            });
+        }
+
+        if (!medicoConsultado) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'El medico que se desea consultar  no existe  con el id: ' + id,
+                errors: error
+            });
+        }
+
+
+        return res.status(200).json({
+            ok: true,
+            mensaje:  'Medico consultado correctamente',  
+            medico: medicoConsultado
+        });
+
+    });
+
+
+
+});
+
 // ========================================== 
 // Método que permite modificar un medico       
 // ==========================================
